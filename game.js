@@ -22,8 +22,9 @@ function randomCountry() {
     let randomPick = Math.floor(Math.random()* countriesAndCodes.length)
     let randomCountry = countriesAndCodes[randomPick]
     randomCountryElement.innerHTML = randomCountry.name
-    let countryCode = randomCountry
+    let countryCode = randomCountry['alpha-2']   // randomCountry is an object, get the alpha-2 code from that object
     url =`https://api.worldbank.org/v2/country/${countryCode}?format=json`
+    
 }
 
 
@@ -55,19 +56,20 @@ submitButton.addEventListener("click", function(){
     answer()
 })
 
-answer()
+// answer()   // don't call this yet
 function answer(){
    
     let useranswerCh = userAnswerElement.value
    fetch(url)
     .then( response => response.json())
     .then( countries => {
-        let city = countries[1][0].city
-        if (city.toLowerCase() == useranswerCh){
-            resultTextElement.innerHTML = ` Correct!! the capita city of   ${randomCountry.name}  is ${useranswerCH}`
+        console.log(countries)
+        let city = countries[1][0].capitalCity
+        if (city.toLowerCase() == useranswerCh.toLowerCase()){  //Lowercase both strings for comparing. Otherwise you'll compare 'berlin' and 'Berlin'
+            resultTextElement.innerHTML = ` Correct!! the capita city of   ${randomCountry.name}  is ${useranswerCh}`
             
         } else {
-            resultTextElement.innerHTML = `Incorrect, the capital city of ${randomCountry.name} is not ${useranswerCH}, 
+            resultTextElement.innerHTML = `Incorrect, the capital city of ${randomCountry.name} is not ${useranswerCh}, 
             it is ${city}`
         }
 })
